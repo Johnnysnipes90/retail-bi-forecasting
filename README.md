@@ -1,66 +1,100 @@
-# Executive Retail BI & Forecasting System (PostgreSQL • Power BI • Time Series)
+# 📊 Executive Retail BI & Forecasting System
 
-An **executive-ready Business Intelligence + Forecasting** project that transforms raw transactional retail data into:
+### PostgreSQL • Power BI • Python ETL • Time Series Forecasting
 
-- **BI-ready KPIs** (Power BI dashboard)
-- **revenue forecasts** (next 6 months)
-- **actionable business recommendations** (pricing, discounting, profitability)
-
----
-
-## 🚀 Why This Project
-
-Retail leadership often lacks:
-
-- a single source of truth for KPIs,
-- visibility into profitability drivers,
-- reliable near-term revenue forecasts for planning.
-
-This project operationalizes an end-to-end workflow:
-**CSV → Python ETL → PostgreSQL → SQL KPIs → Power BI → Forecasting Model → Executive Summary**
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![SQL](https://img.shields.io/badge/SQL-BI%20Views-lightgrey)
+![Power BI](https://img.shields.io/badge/Power%20BI-Executive%20Dashboard-yellow)
+![Status](https://img.shields.io/badge/Project%20Status-In%20Progress-success)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
-## 🎯 Business Objective
+## 📌 Project Overview
 
-Build a **production-style analytics system** that enables executives to:
+An **executive-ready Business Intelligence and Forecasting system** that transforms raw retail transaction data into:
 
-1. monitor sales & profit performance,
-2. identify drivers of growth and losses,
-3. forecast monthly revenue for the next 6 months,
-4. act on insights (discount strategy, category focus, regional performance).
+- **BI-ready KPIs** for executive dashboards (Power BI)
+- **Clean, validated PostgreSQL analytics tables**
+- **Monthly revenue forecasts** (next 6 months)
+- **Actionable business recommendations** on profitability, discounting, and regional performance
+
+This project is built using **production-style data engineering and analytics practices**, not notebook-only analysis.
+
+---
+
+## 🚀 Why This Project Exists
+
+Retail leadership teams often struggle with:
+
+- fragmented KPI definitions,
+- limited visibility into _why_ profit is leaking,
+- reactive decision-making without reliable forecasts.
+
+This project operationalizes a **single source of truth** and a **decision-focused analytics workflow** that supports planning, optimization, and executive reporting.
+
+---
+
+## 🎯 Business Objectives
+
+Build an end-to-end analytics system that enables executives to:
+
+1. Monitor revenue, profit, margin, and loss rates
+2. Identify category, market, and regional performance drivers
+3. Detect unprofitable sales patterns (discounting, shipping costs)
+4. Forecast monthly revenue for the next **6 months**
+5. Translate analytics into **clear business actions**
 
 ---
 
 ## 🧾 Dataset
 
-**File:** `superstore_sales_clean.csv`  
-**Granularity:** one row per **order line item**  
-**Core entities:** Orders • Customers • Products • Geography • Time
+- **File:** `superstore_sales_clean.csv`
+- **Granularity:** One row per **order line item**
+- **Records:** 51,290 rows | 25,035 unique orders
 
-Key fields include:
+### Core Entities
+
+- Orders
+- Customers
+- Products
+- Geography (Market, Region, Country)
+- Time
+
+### Key Metrics
 
 - `sales`, `profit`, `quantity`, `discount`, `shipping_cost`
 - `order_date`, `ship_date`, `market`, `region`, `category`, `sub_category`
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ System Architecture
 
 ```text
 Raw CSV
   ↓
-Python ETL (type casting • date parsing • validation • derived features)
+Python ETL
+  - type casting
+  - date parsing
+  - validation rules
+  - feature engineering
   ↓
-PostgreSQL (staging → production)
+PostgreSQL
+  - staging table
+  - production analytics table
   ↓
-SQL KPI Views (BI-ready aggregations)
+SQL Views
+  - BI-ready KPI aggregations
   ↓
-Power BI Dashboard (Executive reporting)
+Power BI Dashboard
+  - executive reporting
   ↓
-Time Series Forecasting (Monthly revenue + evaluation)
+Time Series Forecasting
+  - monthly revenue predictions
   ↓
-Business Recommendations
+Executive Insights & Recommendations
+
 ```
 
 ---
@@ -80,6 +114,7 @@ Business Recommendations
 - CSV extraction + transformations + BI-safe validation rules
 - Staging → Production load pattern (idempotent reruns)
 - Strongly typed production table for BI + forecasting
+- Sanity-checked metrics against EDA
 
 ---
 
@@ -87,13 +122,17 @@ Business Recommendations
 
 - 51,290 line-item transactions across 25,035 unique orders
 - Total Sales: ~$12.6M
+- Total Orders: 25,035
 - Total Profit: ~$1.47M
 - Profit Margin: ~11.6%
+  **Profitability Insights**
 - Loss-making rate: ~24.5% of transactions are unprofitable
 - Category performance: Technology leads in both revenue and profit
 - Furniture: high revenue but lower profit efficiency (margin opportunity)
 - Market performance: APAC is the highest revenue-generating market
-- Shipping: average delivery time is ~4 days; high shipping costs may erode margins
+  **Operational Signals**
+- Average shipping time ≈ 4 days
+- High shipping costs and aggressive discounting contribute to losses
 
 ---
 
@@ -143,7 +182,7 @@ Python: pandas, numpy, SQLAlchemy, psycopg2, python-dotenv
 
 - 1. Create environment
 
-```Create .env in the project root (use .env.example as template):
+```Create .env in the project root (i used .env.example as template):
 
 PG_HOST=127.0.0.1
 PG_PORT=5432
