@@ -1,0 +1,35 @@
+{
+  "name": "Corporate Executive BI",
+  "dataColors": [
+    "#0B5ED7",
+    "#6C757D",
+    "#198754",
+    "#DC3545",
+    "#FD7E14",
+    "#20C997"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#212529",
+  "tableAccent": "#0B5ED7",
+
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "fontFamily": "Segoe UI Semibold",
+            "fontSize": 12,
+            "color": "#212529"
+          }
+        ],
+        "labels": [
+          {
+            "fontFamily": "Segoe UI",
+            "fontSize": 10,
+            "color": "#495057"
+          }
+        ]
+      }
+    }
+  }
+}
