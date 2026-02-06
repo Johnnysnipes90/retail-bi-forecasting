@@ -203,28 +203,12 @@ Answers: “What is the revenue outlook for the next 6 months?”
 
 ---
 
-- **Operational insight:**
-  Faster shipping increases cost but does not materially improve margin — standard shipping delivers the best profit efficiency.
-
-## Page 4 — Revenue Outlook & Forecast
-
-Answers: “What is the revenue outlook for the next 6 months?”
-
-- Forecast type selector (backtest vs future)
-- Forecast horizon (6 months)
-- Backtest accuracy (sMAPE ≈ 16.1%)
-- Next-month forecast with confidence range
-- Actual vs Forecast line chart with confidence bands
-- Forecast table for planning
-- Executive planning guidance panel
-
----
-
 ## 📈 Revenue Forecasting
 
 Monthly revenue is forecasted using a Seasonal ARIMA (SARIMA) model trained on validated PostgreSQL analytics data.
 
-- **Data**
+**Data**
+
 - Source: public.vw_monthly_sales
 - Frequency: Monthly (Month Start)
 - History: 48 months (2011–2014)
@@ -251,30 +235,23 @@ The SARIMA model significantly outperforms the baseline and is suitable for quar
 
 ## Forecast Output
 
-6-month revenue forecast
-
-95% confidence intervals
-
-Forecast vs actual backtest visualization
-
-Persisted to PostgreSQL table:
-
-public.monthly_sales_forecast
+- 6-month revenue forecast
+- 95% confidence intervals
+- Forecast vs actual backtest visualization
+- Persisted to PostgreSQL table:
+- public.monthly_sales_forecast
 
 ---
 
 ## 🧠 Business Insights & Recommendations
 
-Key Insights
-Revenue exhibits strong seasonality, peaking toward year-end
+**Key Insights**
 
-A small subset of sub-categories generates a disproportionate share of profit
-
-High discount levels strongly correlate with margin erosion
-
-EMEA underperforms on margin despite healthy sales volume
-
-Increased shipping cost does not produce proportional margin gains
+- Revenue exhibits strong seasonality, peaking toward year-end
+- A small subset of sub-categories generates a disproportionate share of profit
+- High discount levels strongly correlate with margin erosion
+- EMEA underperforms on margin despite healthy sales volume
+- Increased shipping cost does not produce proportional margin gains
 
 ---
 
@@ -334,3 +311,14 @@ retail-bi-forecasting/
 - Identifies and explains margin leakage drivers
 - Demonstrates end-to-end analytics engineering, BI, and forecasting capability
 - Transitions analytics from reactive → diagnostic → predictive
+
+---
+
+## 👤 Author & Portfolio
+
+John Olalemi
+Data Scientist • Machine Learning Engineer • Analytics Engineer
+
+- 🔗 LinkedIn: https://www.linkedin.com/in/john-olalemi
+- 🧑‍💻 GitHub: https://github.com/Johnnysnipes90
+- 🌐 Portfolio Website: https://johnnysnipes90.github.io/olalemijohn.github.io/
