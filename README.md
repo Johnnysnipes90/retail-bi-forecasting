@@ -6,33 +6,34 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
 ![SQL](https://img.shields.io/badge/SQL-BI%20Views-lightgrey)
 ![Power BI](https://img.shields.io/badge/Power%20BI-Executive%20Dashboard-yellow)
-![Status](https://img.shields.io/badge/Status-In%20Progress-success)
+![Forecasting](https://img.shields.io/badge/Forecasting-SARIMA-success)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
 ## Overview
 
-An **executive-ready Business Intelligence and Forecasting system** that transforms raw retail transactions into:
+An **executive-ready Business Intelligence and Revenue Forecasting system** that transforms raw retail transaction data into:
 
-- **BI-ready KPIs** for executive dashboards (Power BI)
-- **Validated PostgreSQL analytics tables** (single source of truth)
-- **Monthly revenue forecasts** (next 6 months) with confidence bounds
-- **Actionable insights** on profitability, discounting, and operational performance
+- **Standardized KPIs** for executive reporting
+- **Validated PostgreSQL analytics tables** as a single source of truth
+- **Multi-page Power BI dashboards** covering performance, risk, operations, and outlook
+- **6-month revenue forecasts** with confidence intervals
+- **Actionable business insights and planning recommendations**
 
-This project follows **production-style analytics engineering** practices (SQL-first metrics, validated ETL, reproducible forecasting), not notebook-only analysis.
+This project is built using **production-style analytics engineering practices** — SQL-first metrics, validated ETL pipelines, and reproducible forecasting — not notebook-only analysis.
 
 ---
 
 ## Business Problem
 
-Retail teams often struggle with:
+Retail leadership teams often struggle with:
 
-- fragmented KPI definitions,
+- fragmented KPI definitions across tools,
 - limited visibility into _why_ profit is leaking,
-- reactive decision-making without reliable forecasts.
+- reactive decision-making without forward-looking signals.
 
-This project operationalizes a **decision-focused analytics workflow** to support reporting, diagnostics, and planning.
+This project operationalizes a **decision-focused analytics workflow** that supports monitoring, diagnosis, and proactive revenue planning.
 
 ---
 
@@ -40,9 +41,9 @@ This project operationalizes a **decision-focused analytics workflow** to suppor
 
 1. Monitor revenue, profit, margin, orders, and loss rate
 2. Identify category, market, and regional performance drivers
-3. Detect unprofitable sales patterns (discounting, shipping cost)
+3. Detect unprofitable sales patterns driven by discounting and shipping cost
 4. Forecast monthly revenue for the next **6 months**
-5. Translate analytics into executive-ready recommendations
+5. Translate analytics into **executive-ready recommendations**
 
 ---
 
@@ -52,11 +53,11 @@ This project operationalizes a **decision-focused analytics workflow** to suppor
 - **Granularity:** one row per **order line item**
 - **Records:** 51,290 rows | 25,035 unique orders
 
-**Key fields**
+### Key Fields
 
-- Metrics: `sales`, `profit`, `discount`, `quantity`, `shipping_cost`
-- Dimensions: `market`, `region`, `category`, `sub_category`, `segment`, `ship_mode`
-- Time: `order_date`, `ship_date` (+ engineered `shipping_days`)
+- **Metrics:** `sales`, `profit`, `discount`, `quantity`, `shipping_cost`
+- **Dimensions:** `market`, `region`, `category`, `sub_category`, `segment`, `ship_mode`
+- **Time:** `order_date`, `ship_date` (+ engineered `shipping_days`)
 
 ---
 
@@ -66,7 +67,7 @@ This project operationalizes a **decision-focused analytics workflow** to suppor
 Raw CSV
   ↓
 Python ETL
-  - type casting + date parsing
+  - type casting & date parsing
   - validation rules
   - feature engineering (shipping_days)
   ↓
@@ -75,45 +76,43 @@ PostgreSQL
   ↓
 SQL Views (BI-ready KPI layer)
   ↓
-Power BI Dashboard (executive reporting)
+Power BI Dashboards
   ↓
 Time-Series Forecasting (SARIMA)
   ↓
-Forecast table persisted to PostgreSQL for BI
+Forecast table persisted for BI & planning
 ```
 
 ---
 
-## ✅ What’s Implemented
+## 🧩 What’s Implemented
 
-### 1) Exploratory Data Analysis (EDA)
+**1) Exploratory Data Analysis (EDA)**
 
 - Validated dataset structure, schema, and granularity
 - Confirmed date integrity and shipping logic
-- Verified no missing values or duplicate records
+- Verified no missing values or invalid records
 - Quantified core KPIs: sales, profit, margin, and loss rate
-- Identified key category and geographic performance drivers
+- Identified category and geographic performance drivers
 - Surfaced early risk signals related to discounting and shipping cost
 
 ---
 
-### 2) ETL Pipeline → PostgreSQL
+**2) ETL Pipeline → PostgreSQL**
 
-- Environment-based configuration using `.env`
+- Environment-based configuration using .env
 - Robust CSV extraction and transformation pipeline
-- Strong data validation rules (types, ranges, date logic)
-- Idempotent **staging → production** load pattern
+- Strong validation rules (types, ranges, date logic)
+- Idempotent staging → production load pattern
 - Strongly typed analytics table for BI and forecasting
-- Sanity checks confirm PostgreSQL metrics match EDA outputs
+- Sanity checks ensure PostgreSQL metrics match EDA outputs
 
 ---
 
-### 3) SQL KPI Views (Power BI–Ready)
+**3) SQL KPI Views (Single Source of Truth)**
+All business logic is implemented upstream in SQL, keeping Power BI lightweight, fast, and consistent.
 
-All business logic is implemented **upstream in SQL** to ensure
-a single source of truth and minimal BI-layer complexity.
-
-Implemented views:
+**Implemented views:**
 
 - `public.vw_exec_kpis`
 - `public.vw_monthly_sales`
@@ -122,207 +121,180 @@ Implemented views:
 - `public.vw_region_profitability`
 - `public.vw_shipping_kpis`
 
-These views power both **Power BI dashboards** and **forecasting models**.
-
----
-
-## 🔍 Executive Summary (Key Findings)
-
-- **51,290** line-item transactions across **25,035** unique orders
-- **Total Sales:** ~$12.6M
-- **Total Profit:** ~$1.47M
-- **Profit Margin:** ~11.6%
-- **Loss Rate:** ~24.5% of transactions are loss-making
-
-### Profitability Insights
-
-- Technology leads in both revenue and profit
-- Furniture shows elevated loss rates (margin optimization opportunity)
-- APAC is the highest revenue-generating market
-- EMEA exhibits margin compression
-
-### Operational Signals
-
-- Average shipping time ≈ 4 days
-- High shipping costs combined with aggressive discounting
-  materially contribute to profit leakage
+These views power all dashboards and forecasts.
 
 ---
 
 ## 📊 Power BI Executive Dashboard
 
-A multi-page executive Power BI dashboard built directly on
-PostgreSQL KPI views, ensuring:
+A four-page executive Power BI dashboard built directly on PostgreSQL KPI views.
 
-- **Single source of truth** for all metrics
-- **Minimal DAX complexity** (SQL handles business logic)
-- Clean semantic model with fast refresh performance
+### Page 1 — Executive Overview
 
-### Dashboard Pages
-
-#### 1) Executive Overview
-
-**Answers:** _“How is the business performing?”_
+Answers: “How is the business performing overall?”
 
 - KPI cards:
-  - Total Sales
-  - Total Profit
-  - Profit Margin %
-  - Total Orders
-  - Loss Rate %
-- Monthly revenue trend
+  - Total Sales ($12.6M)
+  - Total Profit ($1.5M)
+  - Profit Margin (11.62%)
+  - Total Orders (25K)
+  - Loss Rate (24.46%)
+- Monthly revenue trend (2011–2014)
 - Sales by market
 - Top sub-categories by revenue and margin
 
+**Executive takeaway:**  
+Revenue is growing steadily, but a high loss rate indicates margin risk beneath top-line growth.
+
+![Executive Overview Dashboard](dashboards/screenshots/01_executive_overview.png)
+
 ---
 
-#### 2) Profitability & Risk
+### Page 2 — Profitability & Risk
 
-**Answers:** _“Where are we leaking money?”_
+Answers: “Where are we leaking money?”
 
-- Discount vs Profitability scatter
-  (sub-category level, sized by revenue)
-- Loss rate by market (risk flags)
+- Discount vs Profitability scatter (sub-category level, sized by revenue)
+- Loss rate by market with risk highlighting
 - Profit margin by region
-- Executive narrative summary highlighting:
-  - ~24.5% loss-making transactions
-  - Margin compression in EMEA
-  - Elevated loss rates in Furniture
+- Narrative risk summary
+
+**Key signals:**
+
+- ~24.5% of transactions are loss-making
+- EMEA shows margin compression
+- Furniture has elevated loss rates at higher discount levels
+
+![Profitability & Risk Dashboard](dashboards/screenshots/02_profitability_risk.png)
 
 ---
 
-#### 3) Operations (Shipping Performance)
+### Page 3 — Operations (Shipping Performance)
 
-**Answers:** _“Are shipping decisions hurting margin?”_
+Answers: “Are shipping decisions hurting margin?”
 
 - Average shipping days by ship mode
 - Average shipping cost by ship mode
 - Shipping KPI table:
   - Sales
   - Profit
-  - Profit Margin (conditional risk formatting)
+  - Profit Margin (conditional formatting)
+
+**Operational insight:**  
+Faster shipping increases cost but does not materially improve margin — standard shipping delivers the best profit efficiency.
+
+![Operations Shipping Dashboard](dashboards/screenshots/03_operations_shipping.png)
 
 ---
 
-### Dashboard Assets
+### Page 4 — Revenue Outlook & Forecast
 
-- Power BI file: `dashboards/Executive_Retail_BI_Forecasting.pbix`
-- Screenshots: `dashboards/screenshots/`
+Answers: “What is the revenue outlook for the next 6 months?”
+
+- Forecast type selector (backtest vs future)
+- Forecast horizon (6 months)
+- Backtest accuracy (sMAPE ≈ 16.1%)
+- Next-month forecast with confidence range
+- Actual vs Forecast line chart with confidence bands
+- Forecast table for planning
+- Executive planning guidance panel
+
+![Revenue Forecast Dashboard](dashboards/screenshots/04_revenue_outlook_forecast.png)
 
 ---
 
-## 📈 Revenue Forecasting (Monthly)
+- **Operational insight:**
+  Faster shipping increases cost but does not materially improve margin — standard shipping delivers the best profit efficiency.
 
-Monthly revenue is forecasted using a **Seasonal ARIMA (SARIMA)** model
-trained on validated PostgreSQL analytics data (single source of truth).
+## Page 4 — Revenue Outlook & Forecast
 
-### Data
+Answers: “What is the revenue outlook for the next 6 months?”
 
-- Source: `public.vw_monthly_sales`
+- Forecast type selector (backtest vs future)
+- Forecast horizon (6 months)
+- Backtest accuracy (sMAPE ≈ 16.1%)
+- Next-month forecast with confidence range
+- Actual vs Forecast line chart with confidence bands
+- Forecast table for planning
+- Executive planning guidance panel
+
+---
+
+## 📈 Revenue Forecasting
+
+Monthly revenue is forecasted using a Seasonal ARIMA (SARIMA) model trained on validated PostgreSQL analytics data.
+
+- **Data**
+- Source: public.vw_monthly_sales
 - Frequency: Monthly (Month Start)
 - History: 48 months (2011–2014)
 
-### Modeling Approach
+**Modeling Approach**
 
 - Seasonal decomposition confirms trend and annual seasonality
 - ADF test indicates non-stationarity → differencing applied
-- Model: **SARIMA(1,1,1)(0,1,1,12)**
-  - `d = 1` captures trend
-  - `D = 1, s = 12` captures annual seasonality
-- Evaluation via leakage-free holdout backtest (last 6 months)
-- Metrics: MAE, RMSE, **sMAPE** (robust percentage error)
+- Model: SARIMA(1,1,1)(0,1,1,12)
+- Leakage-free backtesting (last 6 months)
+- Baseline comparison: seasonal naive (same month last year)
+- Evaluation metric: sMAPE
 
-### Backtest Performance (Holdout: last 6 months)
+**Backtest Performance**
+| Model | MAE | RMSE | sMAPE |
+|------------------|---------|---------|-------|
+| Seasonal Naive | 111,973 | 121,002 | 27.67%|
+| **SARIMA** | 70,220 | 79,585 | 16.09%|
 
-|                     Model |        MAE |       RMSE |      sMAPE |
-| ------------------------: | ---------: | ---------: | ---------: |
-| Seasonal Naive (baseline) |    111,973 |    121,002 |     27.67% |
-|                **SARIMA** | **70,220** | **79,585** | **16.09%** |
+**Conclusion:**
+The SARIMA model significantly outperforms the baseline and is suitable for quarterly and strategic planning, not daily demand forecasting.
 
-The SARIMA model significantly outperforms the baseline,
-providing **planning-grade accuracy** for executive forecasting.
+---
 
-### Forecast Output
+## Forecast Output
 
-- 6-month revenue forecast
-- 95% confidence intervals (lower / upper bounds)
-- Forecast vs Actual backtest visualization
-- Forecast table persisted to PostgreSQL for BI:
+6-month revenue forecast
 
-`public.monthly_sales_forecast`  
-Columns:
+95% confidence intervals
 
-- `month`
-- `actual_sales`
-- `forecast_sales`
-- `ci_lower`
-- `ci_upper`
-- `run_type`
+Forecast vs actual backtest visualization
+
+Persisted to PostgreSQL table:
+
+public.monthly_sales_forecast
+
+---
+
+## 🧠 Business Insights & Recommendations
+
+Key Insights
+Revenue exhibits strong seasonality, peaking toward year-end
+
+A small subset of sub-categories generates a disproportionate share of profit
+
+High discount levels strongly correlate with margin erosion
+
+EMEA underperforms on margin despite healthy sales volume
+
+Increased shipping cost does not produce proportional margin gains
+
+---
+
+## Strategic Recommendations
+
+- Increase inventory and staffing ahead of seasonal peaks
+- Apply margin-aware discount thresholds instead of blanket discounting
+- Double down on high-margin Technology sub-categories
+- Re-evaluate pricing and logistics strategy in EMEA
+- Favor standard shipping for margin stability unless SLAs justify faster options
 
 ---
 
 ## 🧰 Tech Stack
 
-- **Python:** pandas, numpy, SQLAlchemy, psycopg2, python-dotenv,
-  statsmodels, scikit-learn
-- **Database:** PostgreSQL
-- **Analytics Layer:** SQL (views + KPI aggregation)
-- **BI:** Power BI
-- **Forecasting:** SARIMA (statsmodels)
-
----
-
-## ▶️ How to Run Locally
-
-### 1) Create `.env`
-
-Create `.env` in the project root (use `.env.example` as template):
-
-```env
-PG_HOST=127.0.0.1
-PG_PORT=5432
-PG_DB=retail_bi
-PG_USER=postgres
-PG_PASSWORD=your_password
-PG_SCHEMA=public
-RAW_CSV_PATH=data/raw/superstore_sales_clean.csv
-```
-
-### 2) Create Tables
-
-```psql -h localhost -p 5432 -U postgres -d retail_bi -f sql/00_schema.sql
-
-```
-
-### 3) Run ETL (CSV → PostgreSQL)
-
-```python src/etl_load_postgres.py
-
-```
-
-### 4) Create BI Views
-
-```psql -h localhost -p 5432 -U postgres -d retail_bi -f sql/10_bi_views.sql
-
-```
-
-### 5) Sanity Checks
-
-```psql -h localhost -p 5432 -U postgres -d retail_bi -f sql/99_sanity_checks.sql
-psql -h localhost -p 5432 -U postgres -d retail_bi -f sql/11_view_sanity.sql
-```
-
-### 6) Run Forecasting Pipeline (Module)
-
-This runs the SARIMA pipeline and writes output to:
-
-- data/processed/backtest_forecast.csv
-- data/processed/monthly_forecast.csv
-- PostgreSQL table: public.monthly_sales_forecast
-
-```python src/run_forecast.py
-
-```
+- Python: pandas, numpy, SQLAlchemy, statsmodels, scikit-learn
+- Database: PostgreSQL
+- Analytics Layer: SQL (views & KPI logic)
+- BI: Power BI
+- Forecasting: SARIMA
 
 ---
 
@@ -342,314 +314,23 @@ retail-bi-forecasting/
 ├── sql/
 │   ├── 00_schema.sql
 │   ├── 10_bi_views.sql
-│   ├── 11_view_sanity.sql
 │   ├── 20_forecast_table.sql
-│   └── 99_sanity_checks.sql
+│   └── sanity_checks.sql
 ├── src/
-│   ├── forecasting/
-│   │   ├── __init__.py
-│   │   └── sarima_forecast.py
 │   ├── etl_load_postgres.py
-│   ├── validation.py
+│   ├── forecasting/
+│   │   └── sarima_forecast.py
 │   └── run_forecast.py
-├── .env.example
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## 🧠 Business Value
+## Business Value Delivered
 
-- Enables proactive planning through reliable revenue forecasts
-- Flags unprofitable patterns driven by discounting and shipping costs
-- Improves executive visibility via standardized KPI dashboards
+- Converts raw data into decision-ready executive intelligence
+- Enables proactive revenue planning with quantified uncertainty
+- Identifies and explains margin leakage drivers
+- Demonstrates end-to-end analytics engineering, BI, and forecasting capability
 - Transitions analytics from reactive → diagnostic → predictive
-
-# 📊 Executive Retail BI & Forecasting System
-
-### PostgreSQL • Power BI • Python ETL • Time Series Forecasting
-
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
-![SQL](https://img.shields.io/badge/SQL-BI%20Views-lightgrey)
-![Power BI](https://img.shields.io/badge/Power%20BI-Executive%20Dashboard-yellow)
-![Status](https://img.shields.io/badge/Project%20Status-In%20Progress-success)
-![License](https://img.shields.io/badge/License-MIT-green)
-
----
-
-## 📌 Project Overview
-
-An **executive-ready Business Intelligence and Forecasting system** that transforms raw retail transaction data into:
-
-- **BI-ready KPIs** for executive dashboards (Power BI)
-- **Clean, validated PostgreSQL analytics tables**
-- **Monthly revenue forecasts** (next 6 months)
-- **Actionable business recommendations** on profitability, discounting, and regional performance
-
-This project is built using **production-style data engineering and analytics practices**, not notebook-only analysis.
-
----
-
-## 🚀 Why This Project Exists
-
-Retail leadership teams often struggle with:
-
-- fragmented KPI definitions,
-- limited visibility into _why_ profit is leaking,
-- reactive decision-making without reliable forecasts.
-
-This project operationalizes a **single source of truth** and a **decision-focused analytics workflow** that supports planning, optimization, and executive reporting.
-
----
-
-## 🎯 Business Objectives
-
-Build an end-to-end analytics system that enables executives to:
-
-1. Monitor revenue, profit, margin, and loss rates
-2. Identify category, market, and regional performance drivers
-3. Detect unprofitable sales patterns (discounting, shipping costs)
-4. Forecast monthly revenue for the next **6 months**
-5. Translate analytics into **clear business actions**
-
----
-
-## 🧾 Dataset
-
-- **File:** `superstore_sales_clean.csv`
-- **Granularity:** One row per **order line item**
-- **Records:** 51,290 rows | 25,035 unique orders
-
-### Core Entities
-
-- Orders
-- Customers
-- Products
-- Geography (Market, Region, Country)
-- Time
-
-### Key Metrics
-
-- `sales`, `profit`, `quantity`, `discount`, `shipping_cost`
-- `order_date`, `ship_date`, `market`, `region`, `category`, `sub_category`
-
----
-
-## 🏗️ System Architecture
-
-```text
-Raw CSV
-  ↓
-Python ETL
-  - type casting
-  - date parsing
-  - validation rules
-  - feature engineering
-  ↓
-PostgreSQL
-  - staging table
-  - production analytics table
-  ↓
-SQL Views
-  - BI-ready KPI aggregations
-  ↓
-Power BI Dashboard
-  - executive reporting
-  ↓
-Time Series Forecasting
-  - monthly revenue predictions
-  ↓
-Executive Insights & Recommendations
-
-```
-
----
-
-## ✅ What’s Implemented (So Far)
-
-**EDA**
-
-- Confirmed dataset shape and granularity
-- Validated dates and shipping logic
-- Quantified overall sales, profit, margin, and loss rate
-- Identified category and geographic performance signals
-
-**ETL to PostgreSQL**
-
-- Robust environment config via .env
-- CSV extraction + transformations + BI-safe validation rules
-- Staging → Production load pattern (idempotent reruns)
-- Strongly typed production table for BI + forecasting
-- Sanity-checked metrics against EDA
-
----
-
-## 🔍 Key EDA Findings (Executive Summary)
-
-- 51,290 line-item transactions across 25,035 unique orders
-- Total Sales: ~$12.6M
-- Total Orders: 25,035
-- Total Profit: ~$1.47M
-- Profit Margin: ~11.6%
-  **Profitability Insights**
-- Loss-making rate: ~24.5% of transactions are unprofitable
-- Category performance: Technology leads in both revenue and profit
-- Furniture: high revenue but lower profit efficiency (margin opportunity)
-- Market performance: APAC is the highest revenue-generating market
-  **Operational Signals**
-- Average shipping time ≈ 4 days
-- High shipping costs and aggressive discounting contribute to losses
-
----
-
-## 📊 KPI & Dashboard
-
-Planned Power BI pages:
-
-- Executive Overview: Revenue, Profit, Margin, MoM trend
-- Sales Trends: monthly trend + seasonality
-- Category & Product: top/bottom categories, sub-category drilldowns
-- Geography: market and region performance + profitability flags
-
-Screenshots and .pbix is live in: dashboards/
-
----
-
-## 📈 Forecasting
-
-We will forecast monthly revenue for the next 6 months using a time-series model (SARIMA or Prophet).
-
-Model evaluation will include:
-
-- MAE
-- RMSE
-- MAPE
-
-**Expected output:**
-
-- forecast plot (history vs prediction)
-- forecast table with confidence intervals
-- recommendation summary for planning
-
----
-
-## 🧰 Tech Stack
-
-Python: pandas, numpy, SQLAlchemy, psycopg2, python-dotenv
-
-- Database: PostgreSQL
-- Analytics: SQL (views + KPI aggregation)
-- BI: Power BI
-- Forecasting: statsmodels / Prophet (TBD)
-
----
-
-## ▶️ How to Run Locally
-
-- 1. Create environment
-
-```Create .env in the project root (i used .env.example as template):
-
-PG_HOST=127.0.0.1
-PG_PORT=5432
-PG_DB=retail_bi
-PG_USER=postgres
-PG_PASSWORD=your_password
-PG_SCHEMA=public
-RAW_CSV_PATH=data/raw/superstore_sales_clean.csv
-```
-
-- 2. Create tables (schema)
-
-**Run:**
-
-```
-sql/00_schema.sql
-```
-
-- 3. Run ETL (CSV → PostgreSQL)
-
-```
-python src/etl_load_postgres.py
-```
-
-- 4. Verify load
-
-```SELECT COUNT(*) FROM public.retail_sales;
-
-```
-
----
-
-## 📁 Repository Structure
-
-```retail-bi-forecasting/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── notebooks/
-│   └── 01_eda.ipynb
-├── src/
-│   ├── etl_load_postgres.py
-│   └── validation.py
-├── sql/
-│   └── 00_schema.sql
-├── dashboards/
-│   └── screenshots/
-└── README.md
-```
-
----
-
-🧠 Business Impact (Planned Outcomes)
-
-- Enables proactive inventory and staffing decisions via forecasts
-- Flags unprofitable segments (discount + shipping-driven losses)
-- Improves executive visibility and strategy alignment through KPI dashboards.
-
----
-
-## 📈 Revenue Forecasting (Monthly)
-
-Monthly revenue is forecasted using a **Seasonal ARIMA (SARIMA)** model trained on
-validated PostgreSQL analytics data (single source of truth via SQL views).
-
----
-
-### Data
-
-- Source: `public.vw_monthly_sales`
-- Frequency: Monthly (Month Start)
-- History: 48 months (2011–2014)
-
-### Modeling Approach
-
-- Seasonal decomposition used to confirm trend + annual seasonality
-- ADF test indicates non-stationarity → differencing required
-- Model: **SARIMA(1,1,1)(0,1,1,12)**
-  - `d=1` captures trend (non-stationarity)
-  - `D=1, s=12` captures annual seasonality
-- Evaluation: leakage-free holdout backtest (last 6 months)
-- Metrics: MAE, RMSE, **sMAPE** (robust percentage error)
-
-### Backtest Performance (Holdout: last 6 months)
-
-|                     Model |        MAE |       RMSE |      sMAPE |
-| ------------------------: | ---------: | ---------: | ---------: |
-| Seasonal Naive (baseline) |    111,973 |    121,002 |     27.67% |
-|                    SARIMA | **70,220** | **79,585** | **16.09%** |
-
-SARIMA significantly outperforms the baseline, providing **planning-grade accuracy**
-for executive scenario analysis.
-
-### Forecast Output
-
-- 6-month revenue forecast
-- 95% confidence intervals (lower / upper bounds)
-- Backtest plot (Forecast vs Actual)
-- Forecast table persisted to PostgreSQL for BI:
-
-`public.monthly_sales_forecast`  
-Columns: `month`, `actual_sales`, `forecast_sales`, `ci_lower`, `ci_upper`, `run_type`
